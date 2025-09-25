@@ -4,52 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hangman Game</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <div class="container">
         <h1>Hangman</h1>
 
-        <div class="hangman-display">
-            <img src="images/stage0.png" alt="Hangman Stage" id="hangman-image">
-        </div>
-
         <div class="word-display">
-            <span class="letter">_</span>
-            <span class="letter">_</span>
-            <span class="letter">_</span>
-            <span class="letter">_</span>
-            <span class="letter">_</span>
+            {{range .Letters}}
+                <span class="letter">{{.}}</span>
+            {{end}}
         </div>
-
+        
         <div class="alphabet">
-            <button>A</button>
-            <button>B</button>
-            <button>C</button>
-            <button>D</button>
-            <button>E</button>
-            <button>F</button>
-            <button>G</button>
-            <button>H</button>
-            <button>I</button>
-            <button>J</button>
-            <button>K</button>
-            <button>L</button>
-            <button>M</button>
-            <button>N</button>
-            <button>O</button>
-            <button>P</button>
-            <button>Q</button>
-            <button>R</button>
-            <button>S</button>
-            <button>T</button>
-            <button>U</button>
-            <button>V</button>
-            <button>W</button>
-            <button>X</button>
-            <button>Y</button>
-            <button>Z</button>
+            {{range $i, $c := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"}}
+            <form method="POST" style="display:inline;">
+                <input type="hidden" name="letter" value="{{$c}}">
+                <button type="submit">{{$c}}</button>
+            </form>
+            {{end}}
         </div>
+        
+        
+        <img src="/static/images/stage{{.Wrong}}.png" alt="Hangman Stage">
     </div>
 </body>
 </html>
