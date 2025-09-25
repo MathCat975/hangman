@@ -1,0 +1,86 @@
+/* Reset & Fonts */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: #f9f9f9;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Container */
+.container {
+    text-align: center;
+    max-width: 800px;
+    width: 90%;
+}
+
+/* Title */
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: #222;
+}
+
+/* Hangman Image */
+.hangman-display {
+    margin: 20px auto;
+    max-width: 250px;
+}
+
+.hangman-display img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+/* Word Display */
+.word-display {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.word-display .letter {
+    font-size: 2rem;
+    font-weight: bold;
+    border-bottom: 3px solid #333;
+    width: 30px;
+    text-align: center;
+    padding-bottom: 5px;
+}
+
+.alphabet {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.alphabet button {
+    padding: 10px;
+    border: none;
+    background: #eee;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.alphabet button:hover {
+    background: #333;
+    color: white;
+    transform: scale(1.05);
+}
+
+.alphabet button:active {
+    background: #555;
+}
