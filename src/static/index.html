@@ -9,24 +9,33 @@
 <body>
     <div class="container">
         <h1>Hangman</h1>
-
-        <div class="word-display">
-            {{range .Letters}}
-                <span class="letter">{{.}}</span>
-            {{end}}
-        </div>
+    
+        {{if .Finished}}
+            <div class="result-message">
+                <p>{{.Message}}</p>
+            </div>
+        {{else}}
+            <div class="word-display">
+                {{range .Letters}}
+                    <span class="letter">{{.}}</span>
+                {{end}}
+            </div>
+            
+            <div class="alphabet">
+                {{range .Alphabet}}
+                    <form method="POST" style="display:inline;">
+                        <input type="hidden" name="letter" value="{{.}}">
+                        <button type="submit">{{.}}</button>
+                    </form>
+                {{end}}
+            </div>
+            
+            <img src="/static/images/stage{{.Wrong}}.png" alt="Hangman Stage">
+        {{end}}
+    </div>
+    
         
-        <div class="alphabet">
-            {{range $i, $c := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"}}
-            <form method="POST" style="display:inline;">
-                <input type="hidden" name="letter" value="{{$c}}">
-                <button type="submit">{{$c}}</button>
-            </form>
-            {{end}}
-        </div>
         
-        
-        <img src="/static/images/stage{{.Wrong}}.png" alt="Hangman Stage">
     </div>
 </body>
 </html>

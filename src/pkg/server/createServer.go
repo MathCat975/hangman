@@ -1,16 +1,22 @@
 package server
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
+	"strings"
 
 	"main/pkg/game"
 )
 
 type Game struct {
-	Word    string
-	Letters []string
-	Wrong   int
+	Word     string
+	Letters  []string
+	Wrong    int
+	Alphabet []string
+	Corrects int
+	Finished bool
+	Message  string
 }
 
 var (
@@ -25,31 +31,55 @@ func CreateServer() *http.Server {
 		sessionID := "player1"
 
 		if gameState[sessionID] == nil {
-			word := game.Getword("easy")
+			word := strings.ToLower(game.Getword("easy"))
 			letters := make([]string, len(word))
 			for i := range word {
 				letters[i] = "_"
 			}
+
+			alphabet := []string{
+				"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+				"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+			}
+
 			gameState[sessionID] = &Game{
-				Word:    word,
-				Letters: letters,
-				Wrong:   0,
+				Word:     word,
+				Letters:  letters,
+				Wrong:    0,
+				Alphabet: alphabet,
 			}
 		}
 
 		g := gameState[sessionID]
 
 		if r.Method == http.MethodPost {
-			guess := r.FormValue("letter")
+			guess := strings.ToLower(r.FormValue("letter"))
 			correct := false
 			for i, ch := range g.Word {
 				if string(ch) == guess {
 					g.Letters[i] = guess
 					correct = true
+					g.Corrects++
 				}
 			}
 			if !correct {
 				g.Wrong++
+			}
+			for i, letter := range g.Alphabet {
+				if letter == guess {
+					g.Alphabet = append(g.Alphabet[:i], g.Alphabet[i+1:]...)
+					break
+				}
+			}
+
+			if g.Corrects == len(g.Word) {
+				fmt.Printf("You win! The word was %s", g.Word)
+				g.Finished = true
+			}
+
+			if g.Wrong == 8 {
+				fmt.Printf("You lose! The word was %s", g.Word)
+				g.Finished = true
 			}
 		}
 
