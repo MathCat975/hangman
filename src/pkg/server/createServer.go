@@ -47,6 +47,7 @@ func createNewGame(difficulty string) *Game {
 	}
 
 	sessionID := generateSessionID()
+	fmt.Printf("Created new game: %s, world: %s, difficulty: %s", sessionID, word, difficulty)
 	return &Game{
 		Word:           word,
 		Letters:        letters,
@@ -60,23 +61,8 @@ func createNewGame(difficulty string) *Game {
 }
 
 func getOrCreateSession(w http.ResponseWriter, r *http.Request) *Game {
-	cookie, err := r.Cookie("session_id")
-	var sessionID string
-
-	if err != nil || cookie.Value == "" {
-		g := createNewGame("easy")
-		gameState[g.SessionID] = g
-
-		http.SetCookie(w, &http.Cookie{
-			Name:    "session_id",
-			Value:   g.SessionID,
-			Path:    "/",
-			Expires: time.Now().Add(24 * time.Hour),
-		})
-		return g
-	}
-
-	sessionID = cookie.Value
+	cookie, _ := r.Cookie("session_id")
+	sessionID := cookie.Value
 	g, exists := gameState[sessionID]
 
 	if !exists {
@@ -98,8 +84,18 @@ func CreateServer() *http.Server {
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
+	http.HandleFunc("/new", func(w http.ResponseWriter, r *http.Request) {
+		tmpl := template.Must(template.ParseFiles("./static/newgame.html"))
+		tmpl.Execute(w, nil)
+	})
+
 	http.HandleFunc("/newgame", func(w http.ResponseWriter, r *http.Request) {
-		g := createNewGame("easy")
+		difficulty := r.URL.Query().Get("difficulty")
+		if difficulty == "" {
+			difficulty = "easy"
+		}
+
+		g := createNewGame(difficulty)
 		gameState[g.SessionID] = g
 
 		http.SetCookie(w, &http.Cookie{
@@ -113,13 +109,22 @@ func CreateServer() *http.Server {
 	})
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		cookie, err := r.Cookie("session_id")
+		if err != nil || cookie.Value == "" {
+			http.Redirect(w, r, "/new", http.StatusTemporaryRedirect)
+			return
+		}
+
 		g := getOrCreateSession(w, r)
 
 		if r.Method == http.MethodPost && !g.Finished {
 			guess := strings.ToLower(r.FormValue("letter"))
 
 			if g.GuessedLetters[guess] {
-				tmpl := template.Must(template.ParseFiles("./static/index.html"))
+				funcMap := template.FuncMap{
+					"lower": strings.ToLower,
+				}
+				tmpl := template.Must(template.New("index.html").Funcs(funcMap).ParseFiles("./static/index.html"))
 				tmpl.Execute(w, g)
 				return
 			}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Game - Hangman</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>New Game</h1>
+        
+        <div style="text-align: center; margin: 40px 0;">
+            <p style="font-size: 18px; margin-bottom: 30px;">Select Difficulty:</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 15px; max-width: 300px; margin: 0 auto;">
+                <form method="GET" action="/newgame">
+                    <input type="hidden" name="difficulty" value="easy">
+                    <button type="submit" style="width: 100%; padding: 15px 30px; font-size: 18px; background-color: #4CAF50; color: white; border: none; border-radius: 8px; cursor: pointer;">Easy</button>
+                </form>
+                
+                <form method="GET" action="/newgame">
+                    <input type="hidden" name="difficulty" value="medium">
+                    <button type="submit" style="width: 100%; padding: 15px 30px; font-size: 18px; background-color: #FF9800; color: white; border: none; border-radius: 8px; cursor: pointer;">Medium</button>
+                </form>
+                
+                <form method="GET" action="/newgame">
+                    <input type="hidden" name="difficulty" value="hard">
+                    <button type="submit" style="width: 100%; padding: 15px 30px; font-size: 18px; background-color: #F44336; color: white; border: none; border-radius: 8px; cursor: pointer;">Hard</button>
+                </form>
+                
+                <form method="GET" action="/newgame">
+                    <input type="hidden" name="difficulty" value="insane">
+                    <button type="submit" style="width: 100%; padding: 15px 30px; font-size: 18px; background-color: #9C27B0; color: white; border: none; border-radius: 8px; cursor: pointer;">Insane</button>
+                </form>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="/" style="color: #666; text-decoration: none;">← Back to Game</a>
+        </div>
+    </div>
+</body>
+</html>

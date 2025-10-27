@@ -10,13 +10,9 @@
     <div class="container">
         <h1>Hangman</h1>
 
-        {{if .Finished}}
-            <div style="text-align: center; margin: 10px 0;">
-                <form method="GET" action="/newgame" style="display:inline;">
-                    <button type="submit" style="padding: 10px 20px; font-size: 16px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">New Game</button>
-                </form>
-            </div>
-        {{end}}
+        <div style="text-align: center; margin: 10px 0;">
+            <a href="/new" style="display: inline-block; padding: 10px 20px; font-size: 16px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; text-decoration: none;">New Game</a>
+        </div>
     
         {{if .Finished}}
             <div class="result-message">
